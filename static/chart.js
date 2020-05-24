@@ -27,8 +27,16 @@ let chartColors = {
                 .color(chartColors.blue)
                 .alpha(0.5)
                 .rgbString(),
+                categoryPercentage: 1.0,
+                barPercentage: 1.0
             },
-            { label: "price", data: price, yAxisID: "y-axis-2" },
+            {
+                label: "price",
+                data: price,
+                yAxisID: "y-axis-2",
+                categoryPercentage: 1.0,
+                barPercentage: 1.0,
+            },
             {
               label: "cost",
               data: cost,
@@ -38,6 +46,8 @@ let chartColors = {
                 .alpha(1)
                 .rgbString(),
               borderColor: chartColors.red,
+                categoryPercentage: 1.0,
+                barPercentage: 1.0
             },
           ],
         },
@@ -49,8 +59,6 @@ let chartColors = {
                 time: {
                   unit: "hour",
                 },
-                categoryPercentage: 1.0,
-                barPercentage: 1.0
               },
             ],
             yAxes: [
