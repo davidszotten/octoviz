@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import os
 
 import requests
@@ -14,14 +14,16 @@ TARIFF_CODE = f"E-1R-{PRODUCT_CODE}-A"
 # fetch a large chunk in case it's been a while since last time
 # still seems to respond pretty fast at 2k
 PAGE_SIZE = 2000
+PERIOD_FROM = (datetime.now() - timedelta(days=40)).isoformat()
 
 CONSUMPTION_URL = (
     f"{BASE_URL}/v1/electricity-meter-points/"
     f"{MPAN}/meters/{SERIAL_NUMBER}/consumption/?page_size={PAGE_SIZE}"
 )
+# doesn't seem to accept page_size
 RATES_URL = (
     f"{BASE_URL}/v1/products/{PRODUCT_CODE}/"
-    f"electricity-tariffs/{TARIFF_CODE}/standard-unit-rates/?page_size={PAGE_SIZE}"
+    f"electricity-tariffs/{TARIFF_CODE}/standard-unit-rates/?period_from={PERIOD_FROM}"
 )
 
 
@@ -48,12 +50,21 @@ def get_consumption():
             row[key] = as_utc(row[key])
     db["consumption"].insert_all(converted, pk="interval_start", replace=True)
 
+def get_paginated_results(url):
+    results = []
+    next_url = url
+    while next_url:
+        response = requests.get(next_url, auth=(API_KEY, ""))
+        response.raise_for_status()
+        data = response.json()
+        results.extend(data["results"])
+        next_url = data['next']
+    return results
+
 
 def get_rates():
     db = sqlite_utils.Database("octopus.db")
-    response = requests.get(RATES_URL, auth=(API_KEY, ""))
-    response.raise_for_status()
-    results = response.json()["results"]
+    results = get_paginated_results(RATES_URL)
     converted = results.copy()
     for row in converted:
         for key in ["valid_from", "valid_to"]:
