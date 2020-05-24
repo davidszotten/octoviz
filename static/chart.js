@@ -11,9 +11,9 @@ let chartColors = {
       let cost = [];
       for (let row of data) {
         let x = new Date(row.t);
-        consumption.push({x, y: row.consumption});
-        price.push({x, y: row.price});
-        cost.push({x, y: row.cost});
+        row.consumption && consumption.push({x, y: row.consumption});
+        row.price && price.push({x, y: row.price});
+        row.cost && cost.push({x, y: row.cost});
       };
       window.chart = new Chart(ctx, {
         type: "bar",
