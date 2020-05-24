@@ -59,12 +59,20 @@ window.onload = function () {
                 type: "linear",
                 display: true,
                 position: "left",
+                ticks: {
+                    suggestedMax: 1.4,
+                    suggestedMin: -0.6,
+                },
                 id: "y-axis-1",
               },
               {
                 type: "linear",
                 display: true,
                 position: "right",
+                ticks: {
+                    suggestedMax: 35,
+                    suggestedMin: -15,
+                },
                 id: "y-axis-2",
 
                 // grid line settings
