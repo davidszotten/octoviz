@@ -3,7 +3,6 @@ let chartColors = {
   blue: "rgb(54, 162, 235)",
   grey: "rgb(201, 203, 207)",
 };
-window.onload = function () {
   var ctx = document.getElementById("canvas").getContext("2d");
   fetch("/data").then((response) => {
     response.json().then((data) => {
@@ -112,4 +111,3 @@ window.onload = function () {
     document.getElementById("average").innerHTML = `Average: ${data.average.toPrecision(3)}p/kWh`;
     });
   });
-};
