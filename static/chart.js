@@ -3,25 +3,16 @@ let chartColors = {
   blue: "rgb(54, 162, 235)",
   grey: "rgb(201, 203, 207)",
 };
+
   var ctx = document.getElementById("canvas").getContext("2d");
-  fetch("/data").then((response) => {
-    response.json().then((data) => {
-      let consumption = [];
-      let price = [];
-      let cost = [];
-      for (let row of data) {
-        let x = new Date(row.t);
-        row.consumption && consumption.push({x, y: row.consumption});
-        row.price && price.push({x, y: row.price});
-        row.cost && cost.push({x, y: row.cost});
-      };
+  window.data.then((data) => {
       window.chart = new Chart(ctx, {
         type: "bar",
         data: {
           datasets: [
             {
               label: "consumption",
-              data: consumption,
+              data: data.consumption,
               yAxisID: "y-axis-1",
               backgroundColor: Chart.helpers
                 .color(chartColors.blue)
@@ -32,14 +23,14 @@ let chartColors = {
             },
             {
                 label: "price",
-                data: price,
+                data: data.price,
                 yAxisID: "y-axis-2",
                 categoryPercentage: 1.0,
                 barPercentage: 1.0,
             },
             {
               label: "cost",
-              data: cost,
+              data: data.cost,
               yAxisID: "y-axis-2",
               backgroundColor: Chart.helpers
                 .color(chartColors.red)
@@ -111,11 +102,8 @@ let chartColors = {
           },
         },
       });
-    });
   });
 
-  fetch("/average").then((response) => {
-    response.json().then((data) => {
-    document.getElementById("average").innerHTML = `Average: ${data.average.toPrecision(3)}p/kWh`;
-    });
+  window.average.then((average) => {
+    document.getElementById("average").innerHTML = `Average: ${average.toPrecision(3)}p/kWh`;
   });
