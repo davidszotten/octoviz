@@ -50,6 +50,8 @@ window.onload = function () {
                 time: {
                   unit: "hour",
                 },
+                categoryPercentage: 1.0,
+                barPercentage: 1.0
               },
             ],
             yAxes: [
