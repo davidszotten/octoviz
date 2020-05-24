@@ -106,4 +106,10 @@ window.onload = function () {
       });
     });
   });
+
+  fetch("/average").then((response) => {
+    response.json().then((data) => {
+    document.getElementById("average").innerHTML = `Average: ${data.average.toPrecision(3)}p/kWh`;
+    });
+  });
 };
